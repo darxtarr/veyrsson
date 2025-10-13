@@ -1,0 +1,14 @@
+[workspace]
+members = [
+    "crates/embedder",
+    "crates/chunker",
+    "crates/store",
+    "crates/retriever",
+    "crates/condenser",
+    "crates/reasoner",
+    "crates/planner",
+    "crates/mnematode_client",
+    "mentat-bin"
+]
+resolver = "2"
+
