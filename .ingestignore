@@ -4,3 +4,6 @@ index/
 *.log
 *.tmp
 *.lock
+
+# Test directories
+test_small/

@@ -1,0 +1,132 @@
+[
+  {
+    "path": "./ingest_manifest.json",
+    "hash": "b57532566e5a7898465c936c92cf64089a57ce7d8c7900a27bd2ba5a77b951e9",
+    "size": 3923
+  },
+  {
+    "path": "./.ingestignore",
+    "hash": "60ce4201bb211a5fcbd7ae63d710d3d57303024e1de7709b09a038bef1dac552",
+    "size": 70
+  },
+  {
+    "path": "./LICENSE",
+    "hash": "60e88dad7fb88d08a4ef0c4fbbebbfccb94b8bd33a1134db01afbc5aa947c9ab",
+    "size": 1065
+  },
+  {
+    "path": "./Cargo.toml",
+    "hash": "b976c6ed5219adfd339fd3eaaf151a49dc03f86953b52979ce8f0bcf79cf9ea1",
+    "size": 269
+  },
+  {
+    "path": "./README.md",
+    "hash": "55a21a3d6eb88fa4ec80aaeb8a9789e92e206e2fb3796938a028b41b041bc0dc",
+    "size": 10
+  },
+  {
+    "path": "./crates/store/src/lib.rs",
+    "hash": "cf05e740f775e0481e4fea3933655c040e940e59d96e07458c8ce2d349a9f33e",
+    "size": 53
+  },
+  {
+    "path": "./crates/store/Cargo.toml",
+    "hash": "73a398dd413adec42c32ff94fb3dcdc5a961816112d0866060ebdc67037e5604",
+    "size": 87
+  },
+  {
+    "path": "./crates/retriever/src/lib.rs",
+    "hash": "cf05e740f775e0481e4fea3933655c040e940e59d96e07458c8ce2d349a9f33e",
+    "size": 53
+  },
+  {
+    "path": "./crates/retriever/Cargo.toml",
+    "hash": "7022cdea6e763b8521c8e9bd1ce4a2858584fae928d0668f3714c91101e551b9",
+    "size": 91
+  },
+  {
+    "path": "./crates/planner/src/lib.rs",
+    "hash": "cf05e740f775e0481e4fea3933655c040e940e59d96e07458c8ce2d349a9f33e",
+    "size": 53
+  },
+  {
+    "path": "./crates/planner/Cargo.toml",
+    "hash": "f40c46448abb6868049c118e5012dd877cb4ff669e8e7320319ea0b44b84489a",
+    "size": 89
+  },
+  {
+    "path": "./crates/reasoner/src/lib.rs",
+    "hash": "cf05e740f775e0481e4fea3933655c040e940e59d96e07458c8ce2d349a9f33e",
+    "size": 53
+  },
+  {
+    "path": "./crates/reasoner/Cargo.toml",
+    "hash": "13e3d33e47ec70025773e986f33e1388da9e27f56e8a1e2fe00b2bebc41e02d5",
+    "size": 90
+  },
+  {
+    "path": "./crates/chunker/src/lib.rs",
+    "hash": "cf05e740f775e0481e4fea3933655c040e940e59d96e07458c8ce2d349a9f33e",
+    "size": 53
+  },
+  {
+    "path": "./crates/chunker/Cargo.toml",
+    "hash": "4bc6f06aa1e020dbada5e731cbf37bf6e13ab93e1c084f0f5a23d6b652228e8a",
+    "size": 89
+  },
+  {
+    "path": "./crates/embedder/src/lib.rs",
+    "hash": "cf05e740f775e0481e4fea3933655c040e940e59d96e07458c8ce2d349a9f33e",
+    "size": 53
+  },
+  {
+    "path": "./crates/embedder/Cargo.toml",
+    "hash": "ddf1b2c715d236b71ee73e27b1e696e3a3ec2875ea9ce7689275323f5f5de122",
+    "size": 90
+  },
+  {
+    "path": "./crates/mnematode_client/src/lib.rs",
+    "hash": "cf05e740f775e0481e4fea3933655c040e940e59d96e07458c8ce2d349a9f33e",
+    "size": 53
+  },
+  {
+    "path": "./crates/mnematode_client/Cargo.toml",
+    "hash": "3c57c6b2d09f58db04cc82b1079f60758d3251a15e51b2dff3a7701c33508713",
+    "size": 98
+  },
+  {
+    "path": "./crates/condenser/src/lib.rs",
+    "hash": "cf05e740f775e0481e4fea3933655c040e940e59d96e07458c8ce2d349a9f33e",
+    "size": 53
+  },
+  {
+    "path": "./crates/condenser/Cargo.toml",
+    "hash": "08a47b7502724fe3fb4f00a1fb597405aee0c5d8117a24cb833306ba7835d6dd",
+    "size": 91
+  },
+  {
+    "path": "./crates/ingest/src/lib.rs",
+    "hash": "bcbcf9a175e244aa87777b34d086fd612b9f68a4780293ed0ae3ad1fb6cc73ce",
+    "size": 3038
+  },
+  {
+    "path": "./crates/ingest/Cargo.toml",
+    "hash": "e96dd5dd432d1ab064b9a793ef12785291bd729e47edd26bfab25d20ea97b12e",
+    "size": 206
+  },
+  {
+    "path": "./.gitignore",
+    "hash": "e8c78d2b94a0b7051257af69aef56df31d76b184be1ae5a41ce05c4dbfbfae9a",
+    "size": 684
+  },
+  {
+    "path": "./mentat-bin/src/main.rs",
+    "hash": "4022f91f30108a7c33d873da4907e41d5774729989e8d79c8e196273aaae3bd2",
+    "size": 637
+  },
+  {
+    "path": "./mentat-bin/Cargo.toml",
+    "hash": "edb6229c05954c0cf27f4b56d2dda21306f0fd8a4fd162051550c39d63d216c1",
+    "size": 124
+  }
+]

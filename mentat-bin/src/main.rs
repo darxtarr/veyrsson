@@ -58,12 +58,17 @@ fn real_main() -> Result<()> {
 
 fn run_index(path: &str) -> Result<()> {
     // 1) ingest
+    eprintln!("[index] Starting ingest...");
     let files = mentat_ingest::ingest(path)?;
+    eprintln!("[index] Found {} files", files.len());
     // 2) open store
+    eprintln!("[index] Opening store...");
     let store = mentat_store::Store::open_default()?;
     // 3) for each file, chunk + embed
+    eprintln!("[index] Processing files...");
     let root = Path::new(path);
-    for f in files {
+    for (idx, f) in files.iter().enumerate() {
+        eprintln!("[index] File {}/{}: {}", idx+1, files.len(), f.path);
         // write file meta
         let fhash = hex_to32(&f.hash)?;
         store.put_file(fhash, &mentat_store::FileMeta { path: relativize(&f.path, root), size: f.size })?;
