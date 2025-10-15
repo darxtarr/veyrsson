@@ -7,3 +7,11 @@ index/
 
 # Test directories
 test_small/
+
+# Benchmark files
+bench_*.log
+bench_results.txt
+bench_index.sh
+
+# Generated manifests
+ingest_manifest.json

@@ -29,3 +29,6 @@ test_small/
 # Benchmark logs
 bench_*.log
 bench_results.txt
+
+# Generated files
+ingest_manifest.json
