@@ -5,6 +5,9 @@ index/
 *.tmp
 *.lock
 
+# Model files (large binaries)
+crates/embedder/models/
+
 # Test directories
 test_small/
 

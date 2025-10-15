@@ -8,7 +8,7 @@ use anyhow::Result;
 use redb::{Database, ReadableTable, TableDefinition};
 use serde::{Serialize, Deserialize};
 use std::fs;
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use bytemuck::cast_slice;
 
 const FILES: TableDefinition<&[u8], &[u8]>  = TableDefinition::new("files");
@@ -19,6 +19,7 @@ const EMBEDS: TableDefinition<&[u8], &[u8]> = TableDefinition::new("embeds");
 pub struct FileMeta {
     pub path: String,
     pub size: usize,
+    pub mtime: i64,       // seconds since epoch
 }
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -89,6 +90,20 @@ impl Store {
             set.insert(arr);
         }
         Ok(set)
+    }
+
+    pub fn get_file_meta_map(&self) -> Result<HashMap<[u8;32], FileMeta>> {
+        let tx = self.db.begin_read()?;
+        let table = tx.open_table(FILES)?;
+        let mut map = HashMap::new();
+        for item in table.iter()? {
+            let (k, v) = item?;
+            let mut key = [0u8; 32];
+            key.copy_from_slice(k.value());
+            let meta: FileMeta = bincode::deserialize(v.value())?;
+            map.insert(key, meta);
+        }
+        Ok(map)
     }
 }
 

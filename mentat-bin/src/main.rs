@@ -64,8 +64,8 @@ fn run_index(path: &str) -> Result<()> {
     // 2) open store
     eprintln!("[index] Opening store...");
     let store = mentat_store::Store::open_default()?;
-    // NEW: collect cached file hashes
-    let known = store.get_known_hashes()?;
+    // NEW: collect cached file metadata
+    let known = store.get_file_meta_map()?;
     let mut skipped = 0usize;
     // 3) for each file, chunk + embed
     eprintln!("[index] Processing files...");
@@ -74,11 +74,25 @@ fn run_index(path: &str) -> Result<()> {
         eprintln!("[index] File {}/{}: {}", idx+1, files.len(), f.path);
         // write file meta
         let fhash = hex_to32(&f.hash)?;
-        if known.contains(&fhash) {
-            skipped += 1;
-            continue;
+        let meta = std::fs::metadata(&f.path)?;
+        let mtime = meta.modified()?.duration_since(std::time::UNIX_EPOCH)?.as_secs() as i64;
+        let size = meta.len() as usize;
+
+        if let Some(old) = known.get(&fhash) {
+            if old.size == size && old.mtime == mtime {
+                skipped += 1;
+                continue; // unchanged
+            }
         }
-        store.put_file(fhash, &mentat_store::FileMeta { path: relativize(&f.path, root), size: f.size })?;
+
+        store.put_file(
+            fhash,
+            &mentat_store::FileMeta {
+                path: relativize(&f.path, root),
+                size,
+                mtime,
+            },
+        )?;
         // chunk
         let spans = mentat_chunker::chunk_file(&f.path)?;
         if spans.is_empty() { continue; }
@@ -105,7 +119,7 @@ fn run_index(path: &str) -> Result<()> {
         }
     }
     println!(
-        "Index built at ./index/kv.redb — {} new, {} cached",
+        "Index built at ./index/kv.redb — {} new, {} cached (validated by mtime+size)",
         files.len() - skipped,
         skipped
     );
