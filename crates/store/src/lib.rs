@@ -5,9 +5,10 @@
 //!   embeds: key=chunk_id, val=[f32; D] as bytes
 
 use anyhow::Result;
-use redb::{Database, TableDefinition};
+use redb::{Database, ReadableTable, TableDefinition};
 use serde::{Serialize, Deserialize};
 use std::fs;
+use std::collections::HashSet;
 use bytemuck::cast_slice;
 
 const FILES: TableDefinition<&[u8], &[u8]>  = TableDefinition::new("files");
@@ -74,6 +75,20 @@ impl Store {
         }
         tx.commit()?;
         Ok(())
+    }
+
+    pub fn get_known_hashes(&self) -> Result<HashSet<[u8; 32]>> {
+        let tx = self.db.begin_read()?;
+        let table = tx.open_table(FILES)?;
+        let mut set = HashSet::new();
+        for item in table.iter()? {
+            let (key, _) = item?;
+            let key_bytes: &[u8] = key.value();
+            let mut arr = [0u8; 32];
+            arr.copy_from_slice(&key_bytes[..32]);
+            set.insert(arr);
+        }
+        Ok(set)
     }
 }
 
