@@ -156,3 +156,79 @@ cargo run -p mentat -- search-hnsw "index creation"
 - Type-safe (strong typing, no unsafe except controlled conversions)
 
 Good luck with Phase 3c - real embeddings will make this shine!
+
+---
+
+## Session 2: Phase 3c-3d Complete - Real Embeddings + Optimizations
+
+### Phase 3c: Candle + BGE-small Integration (COMPLETED)
+
+**Implementation:**
+- Integrated Candle 0.9 + BGE-small-en-v1.5
+- Real semantic embeddings (384-d, L2 normalized)
+- Model: lazy-loaded, CPU fallback, 512-token truncation
+- Dependencies: candle-core, candle-nn, candle-transformers, tokenizers, once_cell
+- API unchanged: `pub fn embed_text(text: &str) -> Result<[f32; 384]>`
+
+**Verification:**
+- Semantic search working ("embedding model", "database storage", "vector similarity")
+- HNSW acceleration functional
+- Model files: 128MB safetensors + tokenizer (gitignored)
+
+**Performance (debug build):**
+- Baseline: 90 minutes for 31 files (~160 chunks)
+- CPU-bound as expected
+
+### Phase 3d: Release Optimizations (COMPLETED)
+
+**Optimizations Applied:**
+1. Release profile in Cargo.toml:
+   - opt-level = 3
+   - lto = "thin"
+   - codegen-units = 1
+2. Native CPU flags: RUSTFLAGS="-C target-cpu=native"
+3. Benchmark script: bench_index.sh
+
+**Performance Results:**
+- **Debug baseline**: 90 minutes (5,400s)
+- **Release + native**: 2m 49s (170s)
+- **Speedup: 31.8×** 🔥
+- Memory: 315MB peak
+- CPU utilization: 274% (multi-core)
+
+**Benchmark Data:**
+- 160 chunks indexed (33 files)
+- Tagged: phase3c-baseline, v0.3d-cpu-stable
+- Logs: bench_opt1-release.log, bench_results.txt
+
+### Next Session: Phase 3e - Incremental Cache
+
+**Goal:** Turn 2m49s full rebuild into <30s cached rebuild
+
+**Plan:**
+1. Tag v0.3d-cpu-stable for reproducibility
+2. Implement blake3-based embedding cache in ReDB
+3. Cache hit/miss tracking with CLI feedback
+4. Validation script: bench_cache.sh
+5. Documentation: docs/incremental_indexing.md
+
+**Expected Impact:**
+- First run: 2m49s (unchanged)
+- Cached run (no changes): 10-20s (>95% cache hits)
+- Incremental updates: proportional to changed files only
+
+See PHASE_3E_PLAN.md for detailed implementation plan.
+
+### Dependencies Added This Session
+- candle-core v0.9
+- candle-nn v0.9
+- candle-transformers v0.9
+- tokenizers v0.20
+- serde_json v1
+- once_cell v1
+
+### Current State
+- Working end-to-end RAG pipeline with real embeddings
+- Production-ready on CPU (~3 min indexing for small codebases)
+- GPU path ready for desktop (4080) - expect <10s indexing
+- Architecture supports incremental updates (next phase)
