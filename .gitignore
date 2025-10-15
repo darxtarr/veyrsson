@@ -25,3 +25,7 @@ crates/embedder/models/
 
 # Test directories
 test_small/
+
+# Benchmark logs
+bench_*.log
+bench_results.txt
