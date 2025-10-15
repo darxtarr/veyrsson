@@ -1,6 +1,7 @@
 # Ignore build outputs and metadata
 target/
 index/
+.tmp/
 *.log
 *.tmp
 *.lock

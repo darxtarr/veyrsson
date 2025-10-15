@@ -1,5 +1,8 @@
 use std::{env, fs, path::Path};
+use std::io::{Read, Write};
+use std::net::TcpStream;
 use anyhow::Result;
+use serde_json::json;
 
 fn main() {
     if let Err(e) = real_main() {
@@ -43,14 +46,19 @@ fn real_main() -> Result<()> {
                 println!("{:6.3}  id[{}]", d, i);
             }
         }
+        Some("query") => {
+            let q = args.get(2).map(String::as_str).unwrap_or("");
+            run_query(q)?;
+        }
         _ => {
             println!("mentat veyrsson — condensed stub");
             println!("USAGE:");
-            println!("  mentat ingest <path>   # list files + hashes (json manifest)");
-            println!("  mentat index  <path>   # build ReDB index (files, chunks, embeds)");
-            println!("  mentat search <query>  # brute-force search");
-            println!("  mentat build-hnsw      # build HNSW index from embeddings");
-            println!("  mentat search-hnsw <query> # query via HNSW");
+            println!("  mentat ingest <path>       # list files + hashes (json manifest)");
+            println!("  mentat index  <path>       # build ReDB index (files, chunks, embeds)");
+            println!("  mentat search <query>      # brute-force search (cold start)");
+            println!("  mentat build-hnsw          # build HNSW index from embeddings");
+            println!("  mentat search-hnsw <query> # query via HNSW (cold start)");
+            println!("  mentat query <query>       # query via daemon (hot, fast)");
         }
     }
     Ok(())
@@ -138,6 +146,50 @@ fn relativize(p: &str, root: &Path) -> String {
         Ok(r) => r.display().to_string(),
         Err(_) => p.to_string(),
     }
+}
+
+fn run_query(query: &str) -> Result<()> {
+    // Connect to daemon
+    let mut stream = TcpStream::connect("127.0.0.1:6667")
+        .map_err(|e| anyhow::anyhow!("Failed to connect to mentatd at 127.0.0.1:6667: {}. Is the daemon running?", e))?;
+
+    // Build request
+    let request = json!({
+        "cmd": "search",
+        "query": query,
+        "topk": 5
+    });
+
+    // Send request
+    let request_json = serde_json::to_string(&request)?;
+    stream.write_all(request_json.as_bytes())?;
+    stream.flush()?;
+
+    // Read response
+    let mut response_buf = vec![0u8; 65536];
+    let n = stream.read(&mut response_buf)?;
+    let response: serde_json::Value = serde_json::from_slice(&response_buf[..n])?;
+
+    // Display results
+    if let Some(error) = response.get("error") {
+        eprintln!("Error: {}", error);
+        return Ok(());
+    }
+
+    println!("Query results for: \"{}\"", query);
+    if let Some(results) = response.get("results").and_then(|r| r.as_array()) {
+        for item in results {
+            if let Some([id, score]) = item.as_array().map(|a| a.as_slice()) {
+                if let (Some(id_num), Some(score_num)) = (id.as_u64(), score.as_f64()) {
+                    println!("{:6.3}  chunk_id[{}]", score_num, id_num);
+                }
+            }
+        }
+    } else {
+        println!("No results found");
+    }
+
+    Ok(())
 }
 
 // temp explicit uses
