@@ -1,7 +1,8 @@
 [package]
-name = "embedder"
+name = "mentat-embedder"
 version = "0.0.1"
 edition = "2021"
 
-[lib]
-path = "src/lib.rs"
+[dependencies]
+anyhow = "1"
+blake3 = "1"

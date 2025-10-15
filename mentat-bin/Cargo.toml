@@ -4,4 +4,11 @@ version = "0.0.1"
 edition = "2021"
 
 [dependencies]
+anyhow = "1"
+hex = "0.4"
+mentat-ingest = { path = "../crates/ingest" }
+mentat-chunker = { path = "../crates/chunker" }
+mentat-store = { path = "../crates/store" }
+mentat-embedder = { path = "../crates/embedder" }
+mentat-retriever = { path = "../crates/retriever" }
 

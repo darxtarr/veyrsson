@@ -1,7 +1,14 @@
 [package]
-name = "retriever"
-version = "0.0.1"
+name = "mentat-retriever"
+version = "0.0.2"
 edition = "2021"
 
-[lib]
-path = "src/lib.rs"
+[dependencies]
+anyhow = "1"
+redb = "2"
+bytemuck = { version = "1", features = ["derive"] }
+hex = "0.4"
+mentat-embedder = { path = "../embedder" }
+hnsw_rs = "0.3"
+serde = { version = "1", features = ["derive"] }
+bincode = "1"

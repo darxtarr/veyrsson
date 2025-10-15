@@ -1,7 +1,10 @@
 [package]
-name = "chunker"
+name = "mentat-chunker"
 version = "0.0.1"
 edition = "2021"
 
-[lib]
-path = "src/lib.rs"
+[dependencies]
+anyhow = "1"
+memchr = "2"
+serde = { version = "1", features = ["derive"] }
+blake3 = "1"

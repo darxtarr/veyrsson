@@ -8,6 +8,7 @@ members = [
     "crates/reasoner",
     "crates/planner",
     "crates/mnematode_client",
+    "crates/ingest",
     "mentat-bin"
 ]
 resolver = "2"
